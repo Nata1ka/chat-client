@@ -8,6 +8,13 @@ public class JsonMessages {
     private final List<Message> list = new ArrayList<>();
     private int newIndex;
 
+    public JsonMessages() {
+    }
+
+    public JsonMessages(int newIndex) {
+        this.newIndex = newIndex;
+    }
+
     public int getNewIndex() {
         return newIndex;
     }
@@ -19,5 +26,9 @@ public class JsonMessages {
 
     public List<Message> getList() {
         return Collections.unmodifiableList(list);
+    }
+
+    public void setNewIndex(int newIndex) {
+        this.newIndex = newIndex;
     }
 }
