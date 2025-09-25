@@ -8,21 +8,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class GetThread implements Runnable {
     private final Gson gson;
+    private final String myLogin;
     private int n; // /get?from=n
 
-    public GetThread() {
+    public GetThread(String myLogin) {
+        this.myLogin = myLogin;
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     }
 
     @Override
     public void run() { // WebSockets
+
         try {
-            while ( ! Thread.interrupted()) {
-                URL url = new URL(Utils.getURL() + "/get?from=" + n);
+            while (!Thread.interrupted()) {
+                String qLogin = URLEncoder.encode(myLogin, StandardCharsets.UTF_8);
+                URL url = new URL(Utils.getURL() + "/get?for=" + qLogin + "&from=" + n);
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
                 InputStream is = http.getInputStream();
@@ -31,10 +36,10 @@ public class GetThread implements Runnable {
                     String strBuf = new String(buf, StandardCharsets.UTF_8);
 
                     JsonMessages list = gson.fromJson(strBuf, JsonMessages.class);
+                    n = list.getNewIndex();
                     if (list != null) {
                         for (Message m : list.getList()) {
                             System.out.println(m);
-                            n++;
                         }
                     }
                 } finally {

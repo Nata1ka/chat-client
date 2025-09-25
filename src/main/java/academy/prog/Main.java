@@ -9,8 +9,11 @@ public class Main {
 		try {
 			System.out.println("Enter your login: ");
 			String login = scanner.nextLine();
+
+			System.out.println("Enter receiver: ");
+			String receiver = scanner.nextLine();
 	
-			Thread th = new Thread(new GetThread());
+			Thread th = new Thread(new GetThread(login));
 			th.setDaemon(true);
 			th.start();
 
@@ -19,7 +22,7 @@ public class Main {
 				String text = scanner.nextLine();
 				if (text.isEmpty()) break;
 
-				Message m = new Message(login, text);
+				Message m = new Message(login, text, receiver);
 				int res = m.send(Utils.getURL() + "/add");
 
 				if (res != 200) { // 200 OK

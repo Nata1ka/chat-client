@@ -6,6 +6,11 @@ import java.util.List;
 
 public class JsonMessages {
     private final List<Message> list = new ArrayList<>();
+    private int newIndex;
+
+    public int getNewIndex() {
+        return newIndex;
+    }
 
     public JsonMessages(List<Message> sourceList, int fromIndex) {
         for (int i = fromIndex; i < sourceList.size(); i++)
